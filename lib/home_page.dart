@@ -10,7 +10,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<dynamic> food = [];
+  final List<Map<String,dynamic>> _food = [];
 
   @override
   Widget build(BuildContext context) {
@@ -29,8 +29,8 @@ class _HomePageState extends State<HomePage> {
             ),
             Expanded(
                 child: ListView.builder(
-                    itemCount: food.length,
-                    itemBuilder: (context, index) => buildCard(food[index])))
+                    itemCount: _food.length,
+                    itemBuilder: (context, index) => buildCard(_food[index])))
           ],
         ),
       )), // This trailing comma makes auto-formatting nicer for build methods.
@@ -41,11 +41,17 @@ class _HomePageState extends State<HomePage> {
     final url = Uri.parse('https://cpsu-test-api.herokuapp.com/foods');
     var result = await http.get(url);
     var json = jsonDecode(result.body);
-    food = json['data'];
-    print(food);
+    List<dynamic> data= json['data'];
+    print(data);
+
+    setState(() {
+      for(var i in data){
+        _food.add(i);
+      }
+    });
   }
 
-  Card buildCard(dynamic thread) {
+  Card buildCard(thread) {
     return Card(
       elevation: 5.0,
       child: Padding(
@@ -58,20 +64,23 @@ class _HomePageState extends State<HomePage> {
                 Padding(
                   padding: const EdgeInsets.all(4.0),
                 ),
-                Image.network(thread.image),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Image.network(thread["image"],width: 80,height: 80,),
+                ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      thread.name,
+                      thread["name"],
                       style:
-                          TextStyle(fontSize: 50.0,),
+                          TextStyle(fontSize: 30.0,),
                     ),
                     Text(
-                      '${thread.price} บาท',
+                      '${thread["price"]} บาท',
                       style:
-                          TextStyle(fontSize: 25.0,),
+                          TextStyle(fontSize: 15.0,),
                     ),
                   ],
                 ),
