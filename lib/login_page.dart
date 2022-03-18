@@ -201,7 +201,6 @@ class _LoginPageState extends State<LoginPage> {
               context,
               MaterialPageRoute(builder: (context) => const HomePage()),
             );
-            _input = "";
           } else if (_input2 != _input && _input.length == 6) {
             showDialog(
                 context: context,
@@ -214,7 +213,6 @@ class _LoginPageState extends State<LoginPage> {
                       ElevatedButton(
                         onPressed: () {
                           Navigator.of(context).pop();
-                          _input = "";
                         },
                         child: Text('OK'),
                       )
